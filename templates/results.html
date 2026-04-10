@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <section class="card">
+    <h2>Availability</h2>
+    <p class="muted">Stay: {{ check_in }} to {{ check_out }}</p>
+
+    <form method="post" action="{{ url_for('book') }}" class="stack-form">
+      <input type="hidden" name="check_in" value="{{ check_in }}" />
+      <input type="hidden" name="check_out" value="{{ check_out }}" />
+      {% set ns = namespace(selected=false, has_available=false) %}
+
+      <fieldset class="room-choice-group">
+        <legend>1. Choose a Room Type</legend>
+        <div class="room-grid">
+          {% for room in availability %}
+            <label class="room-item room-choice {% if room.available < 1 %}room-disabled{% endif %}">
+              <input
+                type="radio"
+                name="room_type"
+                value="{{ room.room_type }}"
+                {% if room.available < 1 %}disabled{% endif %}
+                {% if room.available > 0 and not ns.selected %}checked{% set ns.selected = true %}{% endif %}
+                required
+              />
+              <span class="room-choice-content">
+                <strong>{{ room.room_type }}</strong>
+                <span>${{ room.price }} per night</span>
+                <span>{{ room.available }} of {{ room.inventory }} rooms available</span>
+                {% if room.available > 0 %}
+                  {% set ns.has_available = true %}
+                {% endif %}
+                {% if room.available < 1 %}
+                  <span class="sold-out">Sold out for these dates</span>
+                {% endif %}
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="guest-details-group">
+        <legend>2. Enter Guest Details</legend>
+
+        <label for="guest_name">Guest Name</label>
+        <input id="guest_name" name="guest_name" type="text" required />
+
+        <label for="guest_email">Guest Email</label>
+        <input id="guest_email" name="guest_email" type="email" required />
+      </fieldset>
+
+      {% if ns.has_available %}
+        <button type="submit">Complete Reservation</button>
+      {% else %}
+        <p class="sold-out">No rooms are available for these dates. Try a different stay period.</p>
+      {% endif %}
+    </form>
+
+    <a href="{{ url_for('index') }}" class="link-back">Search Different Dates</a>
+  </section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <section class="card">
+    <h2>Search Rooms</h2>
+    <form method="post" action="{{ url_for('search') }}" class="stack-form">
+      <label for="check_in">Check-in Date</label>
+      <input id="check_in" name="check_in" type="date" required />
+
+      <label for="check_out">Check-out Date</label>
+      <input id="check_out" name="check_out" type="date" required />
+
+      <button type="submit">Find Available Rooms</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Cancel Booking</h2>
+    <form method="post" action="{{ url_for('cancel') }}" class="stack-form">
+      <label for="reference">Booking Reference</label>
+      <input
+        id="reference"
+        name="reference"
+        type="text"
+        placeholder="BK-20260410-1234"
+        autocomplete="off"
+        required
+      />
+
+      <button type="submit" class="secondary">Cancel Reservation</button>
+    </form>
+  </section>
+{% endblock %}

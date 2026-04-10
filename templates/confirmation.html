@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <section class="card">
+    {% if action == 'booked' %}
+      <h2>Booking Confirmed</h2>
+      <p class="success-text">Your reservation is complete.</p>
+
+      <dl class="summary-grid">
+        <dt>Reference</dt>
+        <dd>{{ booking.reference }}</dd>
+
+        <dt>Guest</dt>
+        <dd>{{ booking.guest_name }}</dd>
+
+        <dt>Email</dt>
+        <dd>{{ booking.guest_email }}</dd>
+
+        <dt>Room Type</dt>
+        <dd>{{ booking.room_type }}</dd>
+
+        <dt>Check-in</dt>
+        <dd>{{ booking.check_in }}</dd>
+
+        <dt>Check-out</dt>
+        <dd>{{ booking.check_out }}</dd>
+
+        <dt>Nights</dt>
+        <dd>{{ booking.nights }}</dd>
+
+        <dt>Total</dt>
+        <dd>${{ booking.total_price }}</dd>
+      </dl>
+    {% elif action == 'canceled' %}
+      <h2>Booking Canceled</h2>
+      <p class="success-text">Reservation {{ booking.reference }} has been canceled.</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}" class="link-back">Return to Home</a>
+  </section>
+{% endblock %}
